@@ -10,7 +10,7 @@ class ShipLoader
     }
 
     /**
-     * @return Ship[]
+     * @return AbstractShip[]
      */
     public function getShips()
     {
@@ -27,7 +27,7 @@ class ShipLoader
 
     /**
      * @param $id
-     * @return Ship|null
+     * @return AbstractShip|null
      */
     public function findOneById($id){
         $pdo = $this->getPDO();
@@ -43,10 +43,16 @@ class ShipLoader
     }
 
     private function createShipFromData(array $shipData){
-        $ship = new Ship($shipData['name']);
+
+        if($shipData['team']=="rebel"){
+            $ship = new RebelShip($shipData['name']);
+        }
+        else{
+            $ship = new Ship($shipData['name']);
+            $ship->setJediFactor($shipData['jedi_factor']);
+        }
         $ship->setId($shipData['id']);
         $ship->setWeaponPower($shipData['weapon_power']);
-        $ship->setJediFactor($shipData['jedi_factor']);
         $ship->setStrength($shipData['strength']);
 
         return $ship;
