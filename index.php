@@ -5,6 +5,9 @@ $container = new Container($configuration);
 $shipLoader = $container->getShiploader();
 $ships = $shipLoader->getShips();
 
+$brokenShip = new BrokenShip("Kaput X2");
+$ships[] = $brokenShip;
+
 $errorMessage = '';
 if (isset($_GET['error'])) {
     switch ($_GET['error']) {

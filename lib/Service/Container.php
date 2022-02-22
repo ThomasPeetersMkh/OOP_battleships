@@ -1,7 +1,5 @@
 <?php
 
-
-
 class Container{
 
     private $configuration;
@@ -9,6 +7,8 @@ class Container{
     private $pdo;
 
     private $shipLoader;
+
+    private $shipStorage;
 
     private $battleManager;
 
@@ -19,7 +19,6 @@ class Container{
      * @return PDO
      */
     public function getPDO(){
-
         if($this->pdo===null){
             $this->pdo = new PDO(
                 $this->configuration['db_dsn'],
@@ -36,9 +35,21 @@ class Container{
      */
     public function getShiploader(){
         if($this->shipLoader === null){
-            $this->shipLoader = new ShipLoader($this->getPDO());
+            $this->shipLoader = new ShipLoader($this->getShipStorage());
         }
         return $this->shipLoader;
+    }
+
+    /**
+     * @return ShipStorageInterface
+     */
+    public function getShipStorage()
+    {
+        if ($this->shipStorage === null) {
+            //$this->shipStorage = new PdoShipStorage($this->getPDO());
+            $this->shipStorage = new JsonFileShipStorage(__DIR__.'/../../resources/ships.json');
+        }
+        return $this->shipStorage;
     }
 
     public function getBattleManager(){
